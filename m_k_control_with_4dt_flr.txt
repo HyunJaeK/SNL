@@ -1,0 +1,133 @@
+#include <Mouse.h>
+#include <Keyboard.h>
+// 다섯개의 버튼에 핀넘버를 설정합니다.
+//const int k_upButton = 4;     
+//const int k_downButton = 2;        
+//const int k_leftButton = 3;
+//const int k_rightButton = 5;
+const int k_reloadButton = 6;
+
+const int m_upButton = 8;     
+const int m_downButton = 9;        
+const int m_leftButton = 10;
+const int m_rightButton = 11;
+const int m_mouseButton = 12;
+
+const int weapon_up = 7;
+const int weapon_down = 13;
+char weapon = '2';
+
+int OUTA;
+int OUTB;
+
+void setup() { // 각버튼의 초기내용을 설정합니다.:
+  //pinMode(k_upButton, INPUT);       
+  //pinMode(k_downButton, INPUT);       
+  //pinMode(k_leftButton, INPUT);       
+  //pinMode(k_rightButton, INPUT);       
+  pinMode(k_reloadButton, INPUT);
+  
+  pinMode(m_upButton, INPUT);       
+  pinMode(m_downButton, INPUT);       
+  pinMode(m_leftButton, INPUT);       
+  pinMode(m_rightButton, INPUT);       
+  pinMode(m_mouseButton, INPUT);
+
+  pinMode(weapon_up, INPUT);       
+  pinMode(weapon_down, INPUT);
+  //시리얼 통신(9600)을 시작합니다.:
+  Serial.begin(9600);
+  //마우스와 키보드설정을 제어합니다.:
+  Mouse.begin();
+  Keyboard.begin();
+}
+
+void loop() {
+  OUTA = digitalRead(2);
+  OUTB = digitalRead(3);
+
+  if (OUTA == 1 && OUTB == 0){
+    Keyboard.write('a'); 
+    delay(10);
+ }
+  if (OUTA == 0 && OUTB == 1){
+    Keyboard.write('d'); 
+    delay(10);
+  }
+
+  if (OUTA == 1 && OUTB == 1){
+    Keyboard.write('w'); 
+    delay(10);
+  }
+  
+  if (digitalRead(m_upButton) == HIGH) {
+    Mouse.move(0, -5);
+    delay(3);
+  }
+  if (digitalRead(m_downButton) == HIGH) { 
+    Mouse.move(0, 5);
+    delay(3);
+  }
+  if (digitalRead(m_leftButton) == HIGH) { 
+    Mouse.move(-5, 0);
+    delay(3);
+  }
+  if (digitalRead(m_rightButton) == HIGH) {
+    Mouse.move(5, 0);
+    delay(3);
+  }
+  if (digitalRead(m_mouseButton) == HIGH) {
+    Mouse.click(MOUSE_LEFT); 
+    delay(3);
+  }
+  /*
+  if (digitalRead(k_upButton) == HIGH) {
+    Keyboard.write('w'); 
+    delay(3);
+  }
+  if (digitalRead(k_leftButton) == HIGH) {
+    Keyboard.write('a'); 
+    delay(3);
+  }
+  if (digitalRead(k_rightButton) == HIGH) {
+    Keyboard.write('d'); 
+    delay(3);
+  }2
+  if (digitalRead(k_downButton) == HIGH) {
+    Keyboard.write('s'); 
+    delay(3);
+  }
+  */
+  if (digitalRead(k_reloadButton) == HIGH) {
+    Keyboard.write('r'); 
+    delay(10);
+  }
+  if (digitalRead(weapon_up) == HIGH) {
+    weapon ++;
+    if (weapon > '0' && weapon < '6'){
+      Keyboard.write(weapon); 
+      Keyboard.releaseAll();
+      delay(500); 
+    }
+    else if(weapon == '6'){
+      weapon = '5';
+      Keyboard.write(weapon); 
+      Keyboard.releaseAll();
+      delay(500); 
+    }
+  }
+  if (digitalRead(weapon_down) == HIGH) {
+    weapon --;
+    if (weapon > '0' && weapon < '6'){
+      Keyboard.write(weapon);
+      Keyboard.releaseAll(); 
+      delay(500); 
+    }
+    else if(weapon == '0'){
+      weapon = '1';
+      Keyboard.write(weapon); 
+      Keyboard.releaseAll();
+      delay(500); 
+    }
+  }
+}
