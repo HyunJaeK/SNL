@@ -1,0 +1,66 @@
+#include <Mouse.h>
+#include <Keyboard.h>
+
+const int k_reloadButton = 6;
+const int m_mouseButton = 12;
+
+const int weapon_up = 2;
+const int weapon_down = 3;
+char weapon = '2';
+
+void setup() { // 각버튼의 초기내용을 설정합니다.:     
+  pinMode(k_reloadButton, INPUT);
+  pinMode(m_mouseButton, INPUT);
+
+  pinMode(weapon_up, INPUT);       
+  pinMode(weapon_down, INPUT);
+
+  //시리얼 통신(9600)을 시작합니다.:
+  Serial.begin(9600);
+  //마우스와 키보드설정을 제어합니다.:
+  Mouse.begin();
+  Keyboard.begin();
+}
+
+void weapon_select(){
+   if (weapon > '0' && weapon < '6'){
+      weapon_up_down();
+    }
+    else if(weapon == '6'){
+      weapon = '5';
+      weapon_up_down();
+    }
+    else if(weapon == '0'){
+      weapon = '1';
+      weapon_up_down(); 
+    } 
+}
+
+void weapon_up_down(){
+  Keyboard.write(weapon);
+  Keyboard.releaseAll();
+  delay(500);
+}
+
+void loop() {
+  //gun_moving.read()
+  
+  if (digitalRead(m_mouseButton) == HIGH) {
+    Mouse.click(MOUSE_LEFT); 
+    delay(3);
+  }
+  if (digitalRead(k_reloadButton) == HIGH) {
+    Keyboard.write('r'); 
+    delay(10);
+  }
+  if (digitalRead(weapon_up) == HIGH) {
+    weapon ++;
+    weapon_select();
+   
+  }
+  if (digitalRead(weapon_down) == HIGH) {
+    weapon --;
+    weapon_select();
+  }
+  
+}
