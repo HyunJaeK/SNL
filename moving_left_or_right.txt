@@ -1,0 +1,27 @@
+#include <Keyboard.h>
+
+int OUTA;
+int OUTB;
+
+void setup() {
+  Serial.begin(9600);
+  Keyboard.begin();
+}
+
+void moving_left_or_right(){
+  OUTA = digitalRead(2);
+  OUTB = digitalRead(3);
+
+  if (OUTA == 1 && OUTB == 0){
+    Keyboard.write('d'); 
+    delay(10);
+    }
+  if (OUTA == 0 && OUTB == 1){
+    Keyboard.write('a'); 
+    delay(10);
+    }
+}
+
+void loop() {  
+  moving_left_or_right();
+}
