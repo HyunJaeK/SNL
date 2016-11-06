@@ -1,0 +1,71 @@
+#include <SoftwareSerial.h>
+SoftwareSerial bluetooth(2, 3);
+
+const int k_reloadButton = 12;
+const int m_mouseButton = 8;
+
+const int weapon_up = 10;
+const int weapon_down = 9;
+char weapon = '2';
+
+void setup() 
+{
+  Serial.begin(9600);
+  bluetooth.begin(9600);
+
+  pinMode(k_reloadButton, INPUT);
+  pinMode(m_mouseButton, INPUT);
+
+  pinMode(weapon_up, INPUT);       
+  pinMode(weapon_down, INPUT);
+
+}
+
+void weapon_select(){
+   if (weapon > '0' && weapon < '6'){
+      bluetooth.write(weapon);
+      Serial.println(weapon);
+    }
+    else if(weapon == '6'){
+      weapon = '5';
+      bluetooth.write(weapon);
+    }
+    else if(weapon == '0'){
+      weapon = '1';
+      bluetooth.write(weapon);
+      delay(1000);
+      Serial.println(weapon);
+    } 
+}
+
+void loop()
+{
+  if (bluetooth.available()) {
+    Serial.write(bluetooth.read());
+  }
+  if (Serial.available()) {
+    bluetooth.write(Serial.read());
+  }
+    if (digitalRead(m_mouseButton) == HIGH) {
+      bluetooth.write('c');
+      Serial.println('c');
+      delay(10);
+    }
+    if (digitalRead(k_reloadButton) == HIGH) {
+      bluetooth.write('r');
+      Serial.println('r');
+      delay(10);
+    }
+    if (digitalRead(weapon_up) == HIGH) {
+      weapon ++;
+      weapon_select();
+      delay(1000);
+    }
+    if (digitalRead(weapon_down) == HIGH) {
+      weapon --;
+      weapon_select();
+      delay(1000);
+     }
+
+  
+}
