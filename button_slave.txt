@@ -1,0 +1,39 @@
+#include <Mouse.h>
+#include <Keyboard.h>
+#include <SoftwareSerial.h>
+
+#define bluetooth Serial1
+byte input;
+
+void setup() {
+  Serial.begin(9600);
+  bluetooth.begin(9600);
+  Mouse.begin();
+}
+
+void loop() {
+  if (bluetooth.available()) {
+    
+    input = bluetooth.read();
+    
+    if (input=='c') {
+      Mouse.click(MOUSE_LEFT);
+      delay(10);
+    }
+
+    else if (input=='r') {
+      Keyboard.write('r');
+      delay(10);
+    }
+
+    else {
+      Keyboard.write(input);
+      delay(10);
+    }
+  }
+  
+
+  if (Serial.available()) {
+    bluetooth.write(Serial.read());
+  }
+}
