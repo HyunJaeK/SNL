@@ -1,0 +1,36 @@
+#include <SoftwareSerial.h>
+#define bluetooth Serial1
+
+int OUTA;
+int OUTB;
+
+void setup() 
+{
+  Serial.begin(9600);
+  bluetooth.begin(9600);
+}
+
+void moving_left_or_right(){
+  OUTA = digitalRead(2);
+  OUTB = digitalRead(3);
+
+  if (OUTA == 1 && OUTB == 0){
+    bluetooth.write('d');
+    delay(10);
+    }
+  if (OUTA == 0 && OUTB == 1){
+    bluetooth.write('a');
+    delay(10);
+    }
+}
+
+void loop()
+{
+  if (bluetooth.available()) {
+    Serial.write(bluetooth.read());
+  }
+  if (Serial.available()) {
+    bluetooth.write(Serial.read());
+  }
+  moving_left_or_right();
+}
