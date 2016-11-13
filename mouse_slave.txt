@@ -1,0 +1,66 @@
+#include <SoftwareSerial.h>
+#include <Mouse.h>
+#define bluetooth Serial1
+
+String message = "";
+char temp;
+String m_x = "";
+String m_y = "";
+
+int x_point = 0;
+int x_temp;
+int x_move;
+
+int y_temp;
+
+int i = 0;
+
+void setup() 
+{
+  Serial.begin(9600);
+  bluetooth.begin(9600);
+  Mouse.begin();
+}
+//
+void loop()
+{
+  if (bluetooth.available()) {
+    temp = bluetooth.read();
+    if((temp>='0'&&temp<='9')||(temp==',')||(temp=='!')||(temp=='-')){
+     if(temp == ','){
+        m_x = message;
+        message = "";
+        Serial.println("m_x: "+m_x);
+        x_temp = m_x.toInt();
+        x_move = x_temp - x_point;
+        if(x_move > 3){
+          for(i=0;i<x_move;i++){
+            Mouse.move(0,7);
+          }
+          x_point += x_move;
+        }
+        else if (x_move < -3){
+          for(i=x_move;i<0;i++){
+            Mouse.move(0,-7);
+          }
+          x_point += x_move;
+        }
+      }
+      else if(temp == '!'){
+        m_y = message;
+        message = "";
+        Serial.println("m_y: "+m_y);
+        y_temp = m_y.toInt();
+        if(y_temp > 5){
+          Mouse.move(5,0);
+        }
+        if(y_temp < -5){
+          Mouse.move(-5,0);
+        }
+      }
+      else{
+        message += temp; 
+      }
+    }
+  }
+}
