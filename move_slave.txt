@@ -1,0 +1,42 @@
+#include <Keyboard.h>
+#include <SoftwareSerial.h>
+
+#define bluetooth Serial1
+byte input;
+
+void setup() {
+  Serial.begin(9600);
+  bluetooth.begin(9600);
+  Keyboard.begin();
+}
+
+void loop() {
+  if (bluetooth.available()) {
+    input = bluetooth.read();
+    Serial.write(input);
+    if (input=='w') {
+      Keyboard.write('w');
+      delay(10);
+    }
+
+    else if (input=='s') {
+      Keyboard.write('s');
+      delay(10);
+    }
+
+    else if (input=='a') {
+      Keyboard.write('a');
+      delay(10);
+    }
+
+    else if (input=='d') {
+      Keyboard.write('d');
+      delay(10);
+    }
+  }
+  
+
+  if (Serial.available()) {
+    bluetooth.write(Serial.read());
+  }
+}
