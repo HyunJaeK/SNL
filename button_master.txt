@@ -1,12 +1,22 @@
 #include <SoftwareSerial.h>
 SoftwareSerial bluetooth(2, 3);
 
-const int k_reloadButton = 12;
-const int m_mouseButton = 8;
+const int k_reloadButton = 5;
+const int m_mouseButton = 4;
 
-const int weapon_up = 10;
-const int weapon_down = 9;
+const int weapon_up = 7;
+const int weapon_down = 6;
+
+const int sit = 8;
+const int jump = 9;
+
+const int sp1 = 10;
+const int sp2 = 11;
+const int sp3 = 12;
+const int sp4 = 13;
+
 char weapon = '2';
+int count = 0;
 
 void setup() 
 {
@@ -18,13 +28,18 @@ void setup()
 
   pinMode(weapon_up, INPUT);       
   pinMode(weapon_down, INPUT);
+  
+  pinMode(sit, INPUT);       
+  pinMode(jump, INPUT);
 
+  pinMode(sp1, INPUT);       
+  pinMode(sp2, INPUT);  
+  pinMode(sp3, INPUT);       
+  pinMode(sp4, INPUT);
 }
-
 void weapon_select(){
    if (weapon > '0' && weapon < '6'){
       bluetooth.write(weapon);
-      Serial.println(weapon);
     }
     else if(weapon == '6'){
       weapon = '5';
@@ -33,11 +48,8 @@ void weapon_select(){
     else if(weapon == '0'){
       weapon = '1';
       bluetooth.write(weapon);
-      delay(1000);
-      Serial.println(weapon);
     } 
 }
-
 void loop()
 {
   if (bluetooth.available()) {
@@ -46,26 +58,65 @@ void loop()
   if (Serial.available()) {
     bluetooth.write(Serial.read());
   }
-    if (digitalRead(m_mouseButton) == HIGH) {
+  
+    if (digitalRead(m_mouseButton) == 0) {
       bluetooth.write('c');
       Serial.println('c');
       delay(10);
     }
-    if (digitalRead(k_reloadButton) == HIGH) {
+    if (digitalRead(k_reloadButton) == 0) {
       bluetooth.write('r');
       Serial.println('r');
       delay(10);
     }
-    if (digitalRead(weapon_up) == HIGH) {
+    
+    if (digitalRead(weapon_up) == 0) {
       weapon ++;
       weapon_select();
       delay(1000);
     }
-    if (digitalRead(weapon_down) == HIGH) {
+    if (digitalRead(weapon_down) == 0) {
       weapon --;
       weapon_select();
       delay(1000);
      }
+     
+     if (digitalRead(sit)==HIGH) {
+      bluetooth.write('s');
+      Serial.println('s');
+      count = 1;
+      delay(10);
+    }
+    if ((digitalRead(sit)==LOW)&&count==1){
+      bluetooth.write('n');
+      Serial.println('n');
+      count = 0;
+      delay(10);
+    }
+    if (digitalRead(jump)==HIGH) {
+      bluetooth.write('j');
+      Serial.println('j');
+      delay(1000);
+    }
 
-  
+    if (digitalRead(sp1) == HIGH) {
+      bluetooth.write('e');
+      Serial.println('e');
+      delay(10);
+    }
+    if (digitalRead(sp2) == HIGH) {
+      bluetooth.write('g');
+      Serial.println('g');
+      delay(10);
+    }
+    if (digitalRead(sp3) == HIGH) {
+      bluetooth.write('v');
+      Serial.println('v');
+      delay(10);
+    }
+    if (digitalRead(sp4) == HIGH) {
+      bluetooth.write('z');
+      Serial.println('z');
+      delay(10);
+    }
 }
