@@ -9,12 +9,13 @@ void setup() {
   Serial.begin(9600);
   bluetooth.begin(9600);
   Mouse.begin();
+  Keyboard.begin();
 }
 
 void loop() {
   if (bluetooth.available()) {
-    
     input = bluetooth.read();
+    Serial.println(input);
     
     if (input=='c') {
       Mouse.click(MOUSE_LEFT);
@@ -26,13 +27,40 @@ void loop() {
       delay(10);
     }
 
-    else {
+    else if (input=='s') {
+      Keyboard.press(KEY_LEFT_CTRL);
+      delay(10);
+    }
+    else if(input =='n'){
+      Keyboard.releaseAll();
+    }
+    else if (input=='j') {
+      Keyboard.write(' ');
+      delay(10);
+    }
+    else if (input=='e') {
+      Keyboard.write('e');
+      delay(10);
+    }
+    else if (input=='v') {
+      Keyboard.write('v');
+      delay(10);
+    }
+    else if (input=='z') {
+      Keyboard.write('z');
+      delay(10);
+    }
+    else if (input=='g') {
+      Keyboard.write('g');
+      delay(10);
+    }
+
+    else if((input >= '1')&&(input <= '5')){
       Keyboard.write(input);
       delay(10);
     }
   }
   
-
   if (Serial.available()) {
     bluetooth.write(Serial.read());
   }
