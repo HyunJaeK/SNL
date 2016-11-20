@@ -3,10 +3,11 @@
 
 #define bluetooth Serial1
 byte input;
+int count = 0;
 
 void setup() {
-  Serial.begin(9600);
-  bluetooth.begin(9600);
+  Serial.begin(38400);
+  bluetooth.begin(38400);
   Keyboard.begin();
 }
 
@@ -14,25 +15,36 @@ void loop() {
   if (bluetooth.available()) {
     input = bluetooth.read();
     Serial.write(input);
-    if (input=='w') {
-      Keyboard.write('w');
-      delay(10);
+    if (input=='W') {
+      Keyboard.press('w');
+      count = 0;
     }
 
-    else if (input=='s') {
-      Keyboard.write('s');
-      delay(10);
+    else if (input=='S') {
+      Keyboard.press('s');
+      count = 0;
     }
 
-    else if (input=='a') {
-      Keyboard.write('a');
-      delay(10);
+    else if (input=='A') {
+      Keyboard.press('a');
+      count = 0;
     }
 
-    else if (input=='d') {
-      Keyboard.write('d');
-      delay(10);
+    else if (input=='D') {
+      Keyboard.press('d');
+      count = 0;
     }
+    else if(input == 'N'){
+      count ++;
+      if (count >= 2){
+        if (count == 10){
+          count = 3;
+        }
+        Keyboard.releaseAll();
+      }
+      
+    }
+    
   }
   
 
